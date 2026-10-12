@@ -7,7 +7,72 @@ export const getPublicSettings = async (req, res, next) => {
     if (!settings) {
       settings = await BusinessSettings.create({});
     }
+
+    // Safe normalization for legacy documents
+    if (settings.nablCertification && !settings.dftqcCertification) {
+      settings.dftqcCertification = settings.nablCertification;
+    }
+    if (settings.dftqcCertification && !settings.nablCertification) {
+      settings.nablCertification = settings.dftqcCertification;
+    }
+
     res.status(200).json({ success: true, data: settings });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getDeliveryCharges = async (req, res, next) => {
+  try {
+    let settings = await BusinessSettings.findOne();
+    if (!settings) {
+      settings = await BusinessSettings.create({});
+    }
+    const charges = settings.deliverySettings?.districtCharges instanceof Map
+      ? Object.fromEntries(settings.deliverySettings.districtCharges)
+      : (settings.deliverySettings?.districtCharges || {});
+    res.status(200).json({ success: true, data: charges });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateDeliveryCharges = async (req, res, next) => {
+  try {
+    let settings = await BusinessSettings.findOne();
+    if (!settings) {
+      settings = await BusinessSettings.create({});
+    }
+
+    const { districtCharges } = req.body;
+    if (!districtCharges || typeof districtCharges !== 'object') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid district charges format. Expected an object of district name to fee mappings.',
+      });
+    }
+
+    const sanitizedCharges = {};
+    for (const [dist, fee] of Object.entries(districtCharges)) {
+      if (fee !== '' && fee !== null && fee !== undefined) {
+        const numFee = Number(fee);
+        if (!isNaN(numFee) && numFee >= 0) {
+          sanitizedCharges[dist.trim()] = numFee;
+        }
+      }
+    }
+
+    if (!settings.deliverySettings) {
+      settings.deliverySettings = {};
+    }
+    settings.deliverySettings.districtCharges = sanitizedCharges;
+    await settings.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'District delivery charges saved successfully',
+      data: sanitizedCharges,
+    });
   } catch (error) {
     next(error);
   }
@@ -42,11 +107,28 @@ export const updateBusinessSettings = async (req, res, next) => {
 
     if (updates.deliverySettings) {
       const delivery = typeof updates.deliverySettings === 'string' ? JSON.parse(updates.deliverySettings) : updates.deliverySettings;
-      settings.deliverySettings = {
-        standardDeliveryFee: Number(delivery.standardDeliveryFee ?? settings.deliverySettings.standardDeliveryFee),
-        freeDeliveryThreshold: Number(delivery.freeDeliveryThreshold ?? settings.deliverySettings.freeDeliveryThreshold),
-        estimatedDays: delivery.estimatedDays || settings.deliverySettings.estimatedDays,
-      };
+      if (!settings.deliverySettings) {
+        settings.deliverySettings = {};
+      }
+      if (delivery.estimatedDays) {
+        settings.deliverySettings.estimatedDays = delivery.estimatedDays;
+      }
+      if (delivery.districtCharges !== undefined) {
+        const rawCharges = typeof delivery.districtCharges === 'string'
+          ? JSON.parse(delivery.districtCharges)
+          : delivery.districtCharges;
+
+        const sanitized = {};
+        for (const [dist, fee] of Object.entries(rawCharges || {})) {
+          if (fee !== '' && fee !== null && fee !== undefined) {
+            const numFee = Number(fee);
+            if (!isNaN(numFee) && numFee >= 0) {
+              sanitized[dist.trim()] = numFee;
+            }
+          }
+        }
+        settings.deliverySettings.districtCharges = sanitized;
+      }
     }
 
     if (updates.paymentSettings) {

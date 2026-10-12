@@ -50,8 +50,16 @@ const seedDatabase = async () => {
         youtube: 'https://youtube.com/@osoaanepal',
       },
       deliverySettings: {
-        standardDeliveryFee: 150,
-        freeDeliveryThreshold: 3500,
+        districtCharges: {
+          Kathmandu: 100,
+          Lalitpur: 100,
+          Bhaktapur: 100,
+          Jhapa: 100,
+          Morang: 120,
+          Sunsari: 120,
+          Kaski: 120,
+          Chitwan: 120,
+        },
         estimatedDays: '2-4 Business Days',
       },
       paymentSettings: {
@@ -61,8 +69,8 @@ const seedDatabase = async () => {
       dftqcCertification: {
         enabled: true,
         certificationName: 'DFTQC Quality Standards & Compliance',
-        laboratoryName: 'DFTQC Compliant Quality Testing Standards',
-        certificateNumber: 'DFTQC-QC-8892-2024',
+        laboratoryName: 'DFTQC Quality Guidelines Aligned',
+        certificateNumber: '',
         accreditationScope: 'Nutritional Analysis, Purity Verification & Heavy Metals Testing',
         shortDescription: 'OSOAA products follow strict quality testing guidelines aligned with Nepal\'s Department of Food Technology and Quality Control (DFTQC) standards for authentic protein concentration, absence of heavy metals, and pure nutrition.',
         trustBadges: [
@@ -76,8 +84,8 @@ const seedDatabase = async () => {
       nablCertification: {
         enabled: true,
         certificationName: 'DFTQC Quality Standards & Compliance',
-        laboratoryName: 'DFTQC Compliant Quality Testing Standards',
-        certificateNumber: 'DFTQC-QC-8892-2024',
+        laboratoryName: 'DFTQC Quality Guidelines Aligned',
+        certificateNumber: '',
         accreditationScope: 'Nutritional Analysis, Purity Verification & Heavy Metals Testing',
         shortDescription: 'OSOAA products follow strict quality testing guidelines aligned with Nepal\'s Department of Food Technology and Quality Control (DFTQC) standards for authentic protein concentration, absence of heavy metals, and pure nutrition.',
         trustBadges: [
@@ -90,7 +98,7 @@ const seedDatabase = async () => {
       },
       announcementBar: {
         enabled: true,
-        text: '⚡ Free Nationwide Delivery Across Nepal on Orders Over Rs. 3,500 | 100% Authentic Wellness & Nutrition',
+        text: '100% Authentic Wellness & Nutrition',
         link: '/shop',
       },
     });

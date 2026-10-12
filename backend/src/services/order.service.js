@@ -102,13 +102,52 @@ export const orderService = {
       couponDocId = couponResult.couponId;
     }
 
-    // 4. Calculate Delivery Fee
-    let deliveryFee = settings.deliverySettings.standardDeliveryFee;
-    const discountedSubtotal = Math.max(0, itemsSubtotal - couponDiscount);
-    if (discountedSubtotal >= settings.deliverySettings.freeDeliveryThreshold) {
-      deliveryFee = 0; // Free delivery qualified
+    // 4. Validate District and Calculate Delivery Fee based on Customer's District
+    const selectedDistrict = shippingAddress.district?.trim();
+    if (!selectedDistrict) {
+      throw new Error('Please select a valid district for delivery.');
     }
 
+    let configuredDeliveryFee = undefined;
+    const districtCharges = settings.deliverySettings?.districtCharges;
+
+    if (districtCharges) {
+      if (typeof districtCharges.get === 'function') {
+        configuredDeliveryFee = districtCharges.get(selectedDistrict);
+        if (configuredDeliveryFee === undefined) {
+          for (const [dist, fee] of districtCharges.entries()) {
+            if (dist.trim().toLowerCase() === selectedDistrict.toLowerCase()) {
+              configuredDeliveryFee = fee;
+              break;
+            }
+          }
+        }
+      } else if (typeof districtCharges === 'object') {
+        configuredDeliveryFee = districtCharges[selectedDistrict];
+        if (configuredDeliveryFee === undefined) {
+          for (const [dist, fee] of Object.entries(districtCharges)) {
+            if (dist.trim().toLowerCase() === selectedDistrict.toLowerCase()) {
+              configuredDeliveryFee = fee;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (
+      configuredDeliveryFee === undefined ||
+      configuredDeliveryFee === null ||
+      configuredDeliveryFee === '' ||
+      isNaN(Number(configuredDeliveryFee)) ||
+      Number(configuredDeliveryFee) < 0
+    ) {
+      throw new Error(`Delivery is currently unavailable for ${selectedDistrict}. No delivery fee has been configured for this district.`);
+    }
+
+    // Apply delivery fee ONCE per order, regardless of number of products or quantities
+    const deliveryFee = Number(configuredDeliveryFee);
+    const discountedSubtotal = Math.max(0, itemsSubtotal - couponDiscount);
     const grandTotal = discountedSubtotal + deliveryFee;
     const orderNumber = orderService.generateOrderNumber();
 
