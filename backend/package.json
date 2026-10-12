@@ -9,7 +9,8 @@
     "dev": "nodemon src/server.js",
     "seed": "node src/utils/seeder.js",
     "create-admin": "node src/utils/createAdmin.js",
-    "migrate-dftqc": "node src/utils/migrateDftqc.js"
+    "migrate-dftqc": "node src/utils/migrateDftqc.js",
+    "test:seo": "node src/utils/testSeoValidation.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

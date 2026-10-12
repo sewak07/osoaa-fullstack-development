@@ -29,6 +29,7 @@ import blogRoutes from './routes/blog.routes.js';
 import adminBlogRoutes from './routes/adminBlog.routes.js';
 import userRoutes from './routes/user.routes.js';
 import contactRoutes from './routes/contact.routes.js';
+import seoRoutes from './routes/seo.routes.js';
 
 const app = express();
 
@@ -96,6 +97,10 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/admin/blog', adminBlogRoutes);
 app.use('/api/contact', contactRoutes);
+
+// SEO Endpoints (Dynamic Sitemap & Robots.txt)
+app.use('/', seoRoutes);
+app.use('/api', seoRoutes);
 
 // Production Static Serving
 if (ENV.NODE_ENV === 'production') {
