@@ -24,12 +24,12 @@ import { ENV } from '../config/env.js';
 export const createOrUpdateAdmin = async () => {
   try {
     console.log('\n=============================================================');
-    console.log('🚀 OSOAA Production Admin Provisioning Utility');
+    console.log('🚀 Nepal Protein Production Admin Provisioning Utility');
     console.log('=============================================================');
 
     const adminEmail = (process.env.ADMIN_EMAIL || ENV.ADMIN?.EMAIL || '').toLowerCase().trim();
     const adminPassword = (process.env.ADMIN_PASSWORD || ENV.ADMIN?.PASSWORD || '').trim();
-    const adminName = (process.env.ADMIN_NAME || ENV.ADMIN?.NAME || 'OSOAA Administrator').trim();
+    const adminName = (process.env.ADMIN_NAME || ENV.ADMIN?.NAME || 'Nepal Protein Administrator').trim();
     let adminPhone = (process.env.ADMIN_PHONE || ENV.ADMIN?.PHONE || '').trim();
     if (!adminPhone) {
       adminPhone = '9801000001'; // Fallback valid 10-digit phone number if omitted

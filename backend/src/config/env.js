@@ -24,7 +24,7 @@ export const ENV = {
     PORT: parseInt(process.env.SMTP_PORT || '587', 10),
     USER: process.env.SMTP_USER || '',
     PASS: process.env.SMTP_PASS || '',
-    FROM: process.env.EMAIL_FROM || '"OSOAA Wellness & Nutrition" <no-reply@osoaa.com>',
+    FROM: process.env.EMAIL_FROM || '"Nepal Protein" <osoaanepal@gmail.com>',
   },
   
   CLOUDINARY: {
@@ -43,7 +43,7 @@ export const ENV = {
   ADMIN: {
     EMAIL: process.env.ADMIN_EMAIL || '',
     PASSWORD: process.env.ADMIN_PASSWORD || '',
-    NAME: process.env.ADMIN_NAME || 'OSOAA Administrator',
+    NAME: process.env.ADMIN_NAME || 'Nepal Protein Administrator',
     PHONE: process.env.ADMIN_PHONE || '+977-9801234567',
   }
 };

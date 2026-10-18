@@ -1,6 +1,7 @@
 import slugify from 'slugify';
 import { Product } from '../models/Product.js';
 import { Category } from '../models/Category.js';
+import { Brand } from '../models/Brand.js';
 import { cloudinaryService } from '../services/cloudinary.service.js';
 
 export const productService = {
@@ -13,6 +14,7 @@ export const productService = {
       limit = 12,
       keyword,
       category,
+      brand,
       minPrice,
       maxPrice,
       sortBy = 'newest',
@@ -45,6 +47,20 @@ export const productService = {
       if (catDoc) query.category = catDoc._id;
     }
 
+    if (brand) {
+      const brandIdentifiers = brand.split(',').map(b => b.trim()).filter(Boolean);
+      const orConditions = brandIdentifiers.map(b => ({
+        $or: [
+          { slug: b },
+          { _id: b.match(/^[0-9a-fA-F]{24}$/) ? b : null }
+        ]
+      }));
+      const brandDocs = await Brand.find({ $or: orConditions });
+      if (brandDocs.length > 0) {
+        query.brand = { $in: brandDocs.map(b => b._id) };
+      }
+    }
+
     if (minPrice || maxPrice) {
       query.price = {};
       if (minPrice) query.price.$gte = Number(minPrice);
@@ -75,6 +91,7 @@ export const productService = {
     const [products, total] = await Promise.all([
       Product.find(query)
         .populate('category', 'name slug')
+        .populate('brand', 'name slug logo isActive description')
         .sort(sortOptions)
         .skip(skip)
         .limit(limitNum)
@@ -101,7 +118,8 @@ export const productService = {
     const query = isId ? { _id: identifier } : { slug: identifier };
 
     const product = await Product.findOne(query)
-      .populate('category', 'name slug');
+      .populate('category', 'name slug')
+      .populate('brand', 'name slug logo isActive description');
 
     return product;
   },
@@ -135,8 +153,16 @@ export const productService = {
     const parsedNutrition = typeof productData.nutritionInformation === 'string' ? JSON.parse(productData.nutritionInformation) : (productData.nutritionInformation || []);
     const parsedTags = typeof productData.tags === 'string' ? JSON.parse(productData.tags) : (productData.tags || []);
 
+    // Resolve brand if slug provided
+    let brandId = productData.brand || null;
+    if (brandId && typeof brandId === 'string' && !brandId.match(/^[0-9a-fA-F]{24}$/)) {
+      const bDoc = await Brand.findOne({ slug: brandId });
+      if (bDoc) brandId = bDoc._id;
+    }
+
     const product = await Product.create({
       ...productData,
+      brand: brandId,
       slug,
       images,
       variants: parsedVariants,
@@ -183,6 +209,14 @@ export const productService = {
 
     if (updateData.sku) product.sku = updateData.sku;
     if (updateData.category) product.category = updateData.category;
+    if (updateData.brand !== undefined) {
+      if (updateData.brand && typeof updateData.brand === 'string' && !updateData.brand.match(/^[0-9a-fA-F]{24}$/)) {
+        const bDoc = await Brand.findOne({ slug: updateData.brand });
+        product.brand = bDoc ? bDoc._id : null;
+      } else {
+        product.brand = updateData.brand || null;
+      }
+    }
     if (updateData.subCategory !== undefined) product.subCategory = updateData.subCategory;
     if (updateData.shortDescription !== undefined) product.shortDescription = updateData.shortDescription;
     if (updateData.description !== undefined) product.description = updateData.description;

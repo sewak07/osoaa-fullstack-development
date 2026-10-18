@@ -7,13 +7,13 @@ import { emailService } from './email.service.js';
 
 export const orderService = {
   /**
-   * Helper to generate unique order number: OSO-YYYYMM-XXXX
+   * Helper to generate unique order number: NP-YYYYMM-XXXX
    */
   generateOrderNumber: () => {
     const date = new Date();
     const yearMonth = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}`;
     const randomDigits = Math.floor(100000 + Math.random() * 900000);
-    return `OSO-${yearMonth}-${randomDigits}`;
+    return `NP-${yearMonth}-${randomDigits}`;
   },
 
   /**

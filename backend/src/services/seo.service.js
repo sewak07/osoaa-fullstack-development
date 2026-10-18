@@ -1,4 +1,5 @@
 import { Category } from '../models/Category.js';
+import { Brand } from '../models/Brand.js';
 import { Product } from '../models/Product.js';
 import { BlogPost } from '../models/BlogPost.js';
 import { ENV } from '../config/env.js';
@@ -63,10 +64,11 @@ export const seoService = {
       { path: '/terms-conditions', lastmod: null, changefreq: 'monthly', priority: '0.4' },
     ];
 
-    // 2. Fetch published categories
-    const categories = await Category.find({ isActive: true })
-      .select('slug updatedAt')
-      .lean();
+    // 2. Fetch published categories and brands
+    const [categories, brands] = await Promise.all([
+      Category.find({ isActive: true }).select('slug updatedAt').lean(),
+      Brand.find({ isActive: true }).select('slug updatedAt').lean(),
+    ]);
 
     // 3. Fetch published products (strictly published, excluding drafts & archived)
     const products = await Product.find({
@@ -107,6 +109,13 @@ export const seoService = {
     categories.forEach((c) => {
       if (c.slug) {
         addEntry(`/shop?category=${encodeURIComponent(c.slug)}`, c.updatedAt, 'weekly', '0.8');
+      }
+    });
+
+    // Add brands
+    brands.forEach((b) => {
+      if (b.slug) {
+        addEntry(`/brands/${encodeURIComponent(b.slug)}`, b.updatedAt, 'weekly', '0.8');
       }
     });
 
@@ -155,10 +164,12 @@ export const seoService = {
    */
   generateRobotsTxt: (baseUrl) => {
     return [
-      '# OSOAA Nepal - Robots.txt',
+      '# Nepal Protein - Robots.txt',
       'User-agent: *',
       'Allow: /',
       'Allow: /shop',
+      'Allow: /brands/',
+      'Allow: /brand/',
       'Allow: /product/',
       'Allow: /blog/',
       'Allow: /about',

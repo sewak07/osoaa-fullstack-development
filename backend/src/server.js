@@ -16,6 +16,7 @@ const __dirname = path.dirname(__filename);
 // Route Imports
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
+import brandRoutes from './routes/brand.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import orderRoutes from './routes/order.routes.js';
 import paymentRoutes from './routes/payment.routes.js';
@@ -76,7 +77,7 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
     timestamp: new Date(),
-    service: 'OSOAA Backend E-Commerce Engine',
+    service: 'Nepal Protein E-Commerce Engine',
     environment: ENV.NODE_ENV,
   });
 });
@@ -85,6 +86,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/brands', brandRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
@@ -124,7 +126,7 @@ const startServer = async () => {
 
   const server = app.listen(ENV.PORT, () => {
     console.log(`\n======================================================`);
-    console.log(`🚀 OSOAA Backend Server running on http://localhost:${ENV.PORT}`);
+    console.log(`🚀 Nepal Protein Backend Server running on http://localhost:${ENV.PORT}`);
     console.log(`🛡️  Environment: ${ENV.NODE_ENV}`);
     console.log(`📦 Client URL: ${ENV.CLIENT_URL}`);
     console.log(`======================================================\n`);

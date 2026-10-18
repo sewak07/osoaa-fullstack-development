@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 const businessSettingsSchema = new mongoose.Schema({
   businessName: {
     type: String,
-    default: 'OSOAA',
+    default: 'Nepal Protein',
     required: true,
   },
   category: {
     type: String,
-    default: 'Welliness & Nutrition',
+    default: 'Sports Nutrition & Fitness Supplements',
     required: true,
   },
   tagline: {
     type: String,
-    default: 'A Journey of Wellness',
+    default: 'Authentic Sports Nutrition & Fitness Supplements',
   },
   logo: {
     url: { type: String, default: '' },
@@ -23,7 +23,7 @@ const businessSettingsSchema = new mongoose.Schema({
     url: { type: String, default: '' },
   },
   contact: {
-    email: { type: String, default: 'support@osoaa.com' },
+    email: { type: String, default: 'osoaanepal@gmail.com' },
     phone: { type: String, default: '+977-9800000000' },
     secondaryPhone: { type: String, default: '+977-01-4000000' },
     address: { type: String, default: 'Kathmandu, Nepal' },
@@ -60,7 +60,7 @@ const businessSettingsSchema = new mongoose.Schema({
     certificateLogoUrl: { type: String, default: '' },
     shortDescription: {
       type: String,
-      default: 'OSOAA products follow strict quality testing guidelines aligned with Nepal\'s Department of Food Technology and Quality Control (DFTQC) standards for authentic protein concentration, absence of heavy metals, and pure nutrition.',
+      default: 'At Nepal Protein, our products, including authentic OSOAA supplements, follow strict quality testing guidelines aligned with Nepal\'s Department of Food Technology and Quality Control (DFTQC) standards for authentic protein concentration, absence of heavy metals, and pure nutrition.',
     },
     trustBadges: {
       type: [String],
@@ -86,7 +86,7 @@ const businessSettingsSchema = new mongoose.Schema({
     certificateLogoUrl: { type: String, default: '' },
     shortDescription: {
       type: String,
-      default: 'OSOAA products follow strict quality testing guidelines aligned with Nepal\'s Department of Food Technology and Quality Control (DFTQC) standards for authentic protein concentration, absence of heavy metals, and pure nutrition.',
+      default: 'At Nepal Protein, our products, including authentic OSOAA supplements, follow strict quality testing guidelines aligned with Nepal\'s Department of Food Technology and Quality Control (DFTQC) standards for authentic protein concentration, absence of heavy metals, and pure nutrition.',
     },
     trustBadges: {
       type: [String],

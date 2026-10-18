@@ -128,7 +128,7 @@ export const authService = {
         avatar: user.avatar,
       },
       token,
-      message: 'Email successfully verified! Welcome to OSOAA.',
+      message: 'Email successfully verified! Welcome to Nepal Protein.',
     };
   },
 

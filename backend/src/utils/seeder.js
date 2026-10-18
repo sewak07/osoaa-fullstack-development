@@ -8,6 +8,7 @@ try {
 } catch {}
 import { User } from '../models/User.js';
 import { Category } from '../models/Category.js';
+import { Brand } from '../models/Brand.js';
 import { Product } from '../models/Product.js';
 import { Coupon } from '../models/Coupon.js';
 import { BusinessSettings } from '../models/BusinessSettings.js';
@@ -24,6 +25,7 @@ const seedDatabase = async () => {
     await Promise.all([
       User.deleteMany(),
       Category.deleteMany(),
+      Brand.deleteMany(),
       Product.deleteMany(),
       Coupon.deleteMany(),
       BusinessSettings.deleteMany(),
@@ -33,14 +35,14 @@ const seedDatabase = async () => {
     // 1. Seed Business Settings
     console.log('Seeding Business Settings & DFTQC configuration...');
     await BusinessSettings.create({
-      businessName: 'OSOAA',
-      category: 'Welliness & Nutrition',
-      tagline: 'A Journey of Wellness',
+      businessName: 'Nepal Protein',
+      category: 'Sports Nutrition & Fitness Supplements',
+      tagline: 'Authentic Sports Nutrition & Fitness Supplements',
       contact: {
-        email: 'info@osoaa.com.np',
-        phone: '+977-9801234567',
+        email: 'osoaanepal@gmail.com',
+        phone: '+977-9802949872',
         secondaryPhone: '+977-01-4432100',
-        address: 'Durbar Marg, Kathmandu, Nepal',
+        address: 'Birgunj 10 Ashokbatika, Parsa, Nepal',
         mapsUrl: 'https://maps.google.com',
       },
       socialLinks: {
@@ -169,11 +171,25 @@ const seedDatabase = async () => {
       categoryMap[cat.name] = doc;
     }
 
+    // 3.5 Seed Brands
+    console.log('Seeding Brands...');
+    const osoaaBrand = await Brand.create({
+      name: 'OSOAA',
+      slug: 'osoaa',
+      description: 'Authentic sports nutrition and wellness brand engineered for pure athletic performance, muscle recovery, and overall vitality.',
+      website: 'https://osoaa.com',
+      isActive: true,
+      isFeatured: true,
+      seoTitle: 'OSOAA Supplements Nepal | Authentic Whey Protein & Creatine',
+      seoDescription: 'Shop genuine OSOAA supplements in Nepal. 100% authentic whey protein isolate, micronized creatine, and pre-workout delivered nationwide.',
+    });
+
     // 4. Seed Products
     console.log('Seeding Products...');
     const products = [
       {
         name: 'OSOAA 100% Pure Whey Protein Isolate',
+        brand: osoaaBrand._id,
         sku: 'OSO-WPI-001',
         category: categoryMap['Protein']._id,
         subCategory: 'Whey Isolate',
@@ -347,6 +363,7 @@ const seedDatabase = async () => {
     for (const prod of products) {
       let slug = slugify(prod.name, { lower: true, strict: true });
       await Product.create({
+        brand: prod.brand || osoaaBrand._id,
         ...prod,
         slug,
       });

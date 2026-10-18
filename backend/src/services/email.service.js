@@ -43,11 +43,11 @@ class EmailService {
 
     // In development or when SMTP is not configured, log clearly to console in non-production environments
     if (ENV.NODE_ENV !== 'production') {
-      console.log(`\n================== [OSOAA EMAIL DISPATCH] ==================`);
+      console.log(`\n================== [NEPAL PROTEIN EMAIL DISPATCH] ==================`);
       console.log(`To: ${to}`);
       console.log(`Subject: ${subject}`);
       console.log(`Body:\n${text || html}`);
-      console.log(`============================================================\n`);
+      console.log(`====================================================================\n`);
     }
     return { success: true, isDevFallback: true };
   }
@@ -56,21 +56,21 @@ class EmailService {
    * Send Email Verification OTP
    */
   async sendVerificationOtp({ email, name, otp }) {
-    const subject = 'Verify your OSOAA account';
-    const text = `Hello ${name},\n\nYour OSOAA verification code is: ${otp}\n\nThis code will expire in 10 minutes.\nIf you did not request this, please ignore this email.\n\nOSOAA - A Journey of Wellness`;
+    const subject = 'Verify your Nepal Protein account';
+    const text = `Hello ${name},\n\nYour Nepal Protein verification code is: ${otp}\n\nThis code will expire in 10 minutes.\nIf you did not request this, please ignore this email.\n\nNepal Protein - Authentic Sports Nutrition & Fitness Supplements`;
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
         <div style="background-color: #0f172a; padding: 24px; text-align: center;">
-          <h1 style="color: #10b981; margin: 0; font-size: 28px; letter-spacing: 2px;">OSOAA</h1>
-          <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 14px;">A Journey of Wellness</p>
+          <h1 style="color: #f97316; margin: 0; font-size: 26px; letter-spacing: 2px;">NEPAL PROTEIN</h1>
+          <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">Authentic Sports Nutrition & Fitness Supplements</p>
         </div>
         <div style="padding: 32px 24px; color: #1e293b;">
           <h2 style="margin-top: 0; font-size: 20px; color: #0f172a;">Account Email Verification</h2>
           <p style="font-size: 15px; line-height: 1.6; color: #475569;">
-            Hi <strong>${name}</strong>, thank you for registering with OSOAA. Please use the 6-digit verification code below to activate your account:
+            Hi <strong>${name}</strong>, thank you for registering with Nepal Protein. Please use the 6-digit verification code below to activate your account:
           </p>
           <div style="margin: 28px 0; text-align: center;">
-            <div style="display: inline-block; background-color: #ecfdf5; border: 2px dashed #10b981; border-radius: 8px; padding: 14px 28px; font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #065f46;">
+            <div style="display: inline-block; background-color: #fff7ed; border: 2px dashed #f97316; border-radius: 8px; padding: 14px 28px; font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #c2410c;">
               ${otp}
             </div>
           </div>
@@ -79,7 +79,7 @@ class EmailService {
           </p>
         </div>
         <div style="background-color: #f8fafc; padding: 16px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
-          © ${new Date().getFullYear()} OSOAA Wellness & Nutrition. All rights reserved. Kathmandu, Nepal.
+          © ${new Date().getFullYear()} Nepal Protein. All rights reserved. Kathmandu, Nepal.
         </div>
       </div>
     `;
@@ -91,13 +91,13 @@ class EmailService {
    * Send Password Reset OTP
    */
   async sendPasswordResetOtp({ email, name, otp }) {
-    const subject = 'Reset your OSOAA account password';
-    const text = `Hello ${name},\n\nYour password reset code for OSOAA is: ${otp}\n\nThis code will expire in 10 minutes.\nIf you did not request a password reset, please secure your account.\n\nOSOAA - A Journey of Wellness`;
+    const subject = 'Reset your Nepal Protein account password';
+    const text = `Hello ${name},\n\nYour password reset code for Nepal Protein is: ${otp}\n\nThis code will expire in 10 minutes.\nIf you did not request a password reset, please secure your account.\n\nNepal Protein - Authentic Sports Nutrition & Fitness Supplements`;
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
         <div style="background-color: #0f172a; padding: 24px; text-align: center;">
-          <h1 style="color: #10b981; margin: 0; font-size: 28px; letter-spacing: 2px;">OSOAA</h1>
-          <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 14px;">A Journey of Wellness</p>
+          <h1 style="color: #f97316; margin: 0; font-size: 26px; letter-spacing: 2px;">NEPAL PROTEIN</h1>
+          <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">Authentic Sports Nutrition & Fitness Supplements</p>
         </div>
         <div style="padding: 32px 24px; color: #1e293b;">
           <h2 style="margin-top: 0; font-size: 20px; color: #0f172a;">Password Reset Request</h2>
@@ -114,7 +114,7 @@ class EmailService {
           </p>
         </div>
         <div style="background-color: #f8fafc; padding: 16px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
-          © ${new Date().getFullYear()} OSOAA Wellness & Nutrition. All rights reserved. Kathmandu, Nepal.
+          © ${new Date().getFullYear()} Nepal Protein. All rights reserved. Kathmandu, Nepal.
         </div>
       </div>
     `;
@@ -126,13 +126,13 @@ class EmailService {
    * Send Order Confirmation Email
    */
   async sendOrderConfirmation({ order, user }) {
-    const subject = `Order Confirmed - #${order.orderNumber} | OSOAA`;
-    const text = `Hello ${user.name},\n\nThank you for your order #${order.orderNumber} at OSOAA.\nTotal Amount: Rs. ${order.pricing.grandTotal}\nPayment Method: ${order.paymentInfo.method}\nWe are preparing your items for delivery.\n\nOSOAA - A Journey of Wellness`;
+    const subject = `Order Confirmed - #${order.orderNumber} | Nepal Protein`;
+    const text = `Hello ${user.name},\n\nThank you for your order #${order.orderNumber} at Nepal Protein.\nTotal Amount: Rs. ${order.pricing.grandTotal}\nPayment Method: ${order.paymentInfo.method}\nWe are preparing your items for delivery.\n\nNepal Protein - Authentic Sports Nutrition & Fitness Supplements`;
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
         <div style="background-color: #0f172a; padding: 24px; text-align: center;">
-          <h1 style="color: #10b981; margin: 0; font-size: 28px; letter-spacing: 2px;">OSOAA</h1>
-          <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 14px;">Order Confirmation</p>
+          <h1 style="color: #f97316; margin: 0; font-size: 26px; letter-spacing: 2px;">NEPAL PROTEIN</h1>
+          <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">Order Confirmation</p>
         </div>
         <div style="padding: 24px; color: #1e293b;">
           <h2 style="margin-top: 0; color: #0f172a;">Thank you for your order!</h2>
@@ -140,6 +140,9 @@ class EmailService {
           <p style="color: #475569;">Payment Method: <strong>${order.paymentInfo.method}</strong></p>
           <p style="color: #475569;">Total Amount: <strong>Rs. ${order.pricing.grandTotal.toLocaleString()}</strong></p>
           <p style="color: #475569;">Delivery Address: ${order.shippingAddress.streetAddress}, ${order.shippingAddress.municipality}, ${order.shippingAddress.district}, ${order.shippingAddress.province}</p>
+        </div>
+        <div style="background-color: #f8fafc; padding: 16px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
+          © ${new Date().getFullYear()} Nepal Protein. All rights reserved. Kathmandu, Nepal.
         </div>
       </div>
     `;
@@ -151,13 +154,13 @@ class EmailService {
    * Send Contact Us Form Notification to Business Admin
    */
   async sendContactNotification({ name, email, phone, subject: msgSubject, message, toEmail }) {
-    const recipient = toEmail || ENV.ADMIN.EMAIL || ENV.SMTP.USER || 'support@osoaa.com';
+    const recipient = toEmail || ENV.ADMIN.EMAIL || ENV.SMTP.USER || 'osoaanepal@gmail.com';
     const emailSubject = `[Contact Enquiry] ${msgSubject} - from ${name}`;
-    const text = `New Contact Form Submission from OSOAA Website:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nSubject: ${msgSubject}\n\nMessage:\n${message}\n\nReceived at: ${new Date().toLocaleString()}`;
+    const text = `New Contact Form Submission from Nepal Protein Website:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nSubject: ${msgSubject}\n\nMessage:\n${message}\n\nReceived at: ${new Date().toLocaleString()}`;
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
         <div style="background-color: #0f172a; padding: 24px; text-align: center;">
-          <h1 style="color: #f97316; margin: 0; font-size: 26px; letter-spacing: 2px;">OSOAA</h1>
+          <h1 style="color: #f97316; margin: 0; font-size: 26px; letter-spacing: 2px;">NEPAL PROTEIN</h1>
           <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">Customer Contact Inquiry</p>
         </div>
         <div style="padding: 24px; color: #1e293b;">
@@ -192,7 +195,7 @@ class EmailService {
           </p>
         </div>
         <div style="background-color: #f8fafc; padding: 14px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8;">
-          © ${new Date().getFullYear()} OSOAA E-Commerce Engine. Automated Notification.
+          © ${new Date().getFullYear()} Nepal Protein. Automated Notification.
         </div>
       </div>
     `;
